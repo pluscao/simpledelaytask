@@ -1,0 +1,4 @@
+#########
+task-settings:
+  autoStart: false
+  timeAfter: 60000
