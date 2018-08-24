@@ -33,7 +33,7 @@ public class TaskCircle {
     }
 
     public void addTask(Integer index , AbstractTaskBase task){
-        threadPool.submit(new TaskAddThread(index ,task ,taskCircle));
+        threadPool.execute(new TaskAddThread(index ,task ,taskCircle));
     }
     public void taskExecut(AbstractTaskBase task){
         threadPool.submit(new TaskDoingThread(task));

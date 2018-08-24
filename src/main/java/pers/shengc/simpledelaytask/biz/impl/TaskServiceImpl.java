@@ -23,16 +23,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public void addTask(Long time) throws Exception {
+        Long now = System.currentTimeMillis();
+
         // 计算当前时间与定时时间的差值md
-        Long difference = time - System.currentTimeMillis();
+        Long difference = time - now;
 
         //定时时间要大于当前系统时间 timeAfter 毫秒才可以设置成功
         if (difference <= TIME_AFTER) {
             throw new Exception("需要一个未来的时间");
         }
 
-        // 验证通过，启动任务定时器
-        startTask();
+        // 验证通过，设置时间
+        setStartTime(now);
+
 
         // 计算所在区域
         int index = (int) ((time - getStartTime()) / 1000 % CIRCLE_SIZE);
@@ -42,7 +45,8 @@ public class TaskServiceImpl implements TaskService {
         AbstractTaskBase task = new DelayAlertTask(count);
 
         TaskFactory.getTaskCircleInstance().addTask(index, task);
-
+        // 开启定时器
+        startTask();
 
     }
 
@@ -60,8 +64,6 @@ public class TaskServiceImpl implements TaskService {
         }
         countStart();
         setAutoStart(true);
-        //差不多两秒的误差。。。
-        setStartTime(System.currentTimeMillis() + 2);
         return ;
     }
 
